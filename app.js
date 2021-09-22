@@ -13,10 +13,45 @@ function eventListeners() {
 
     // Getting all todos from storage when page loaded.
     document.addEventListener("DOMContentLoaded",loadAllTodosToUI);
-
+    // Deleting todos 
+    secondCardBody.addEventListener("click",deleteTodo)
+    // Filter 
+    filter.addEventListener("keyup",filterTodos)
 
 }
 
+function filterTodos(e) {
+    const filterValue = e.target.value.toLowerCase();
+    const listItems = document.querySelectorAll(".list-group-item")
+    listItems.forEach((listItem)=>{
+        const text = listItem.textContent.toLowerCase();
+
+        if (text.indexOf(filterValue) === -1){
+            // Bulamadı
+            listItem.setAttribute("style","display:none !important")
+        }else{
+            listItem.setAttribute("style","display:block")
+        }
+    })
+}
+
+function deleteTodoFromStorage(deletedTodo) {
+    let todos = getTodosFromStorage();
+    todos.forEach((todo,index) => {
+        if (todo === deletedTodo) {
+            todos.splice(index,1); // Deleting todo from array
+        }
+    });
+    localStorage.setItem("todos",JSON.stringify(todos));
+}
+function deleteTodo(e) {
+    if (e.target.className === "fa fa-remove") {
+        let pickedTodo = e.target.parentElement.parentElement;
+        pickedTodo.remove();
+        deleteTodoFromStorage(pickedTodo.textContent)
+        showAlert("success","Todo Başarıyla silindi")
+    }
+}
 function loadAllTodosToUI() {
     let todos = getTodosFromStorage();
 
