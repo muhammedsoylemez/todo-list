@@ -18,7 +18,15 @@ function addTodo(e) {
 
     const newTodo = todoInput.value.trim();
 
-    addTodoToUI(newTodo);
+    if (newTodo === "") {
+
+        showAlert("danger", "Lütfen bir todo girin..")
+    } else {
+        addTodoToUI(newTodo);
+        showAlert("success", "Başarıyla eklendi.")
+
+    }
+
 
     e.preventDefault();
 
@@ -28,7 +36,7 @@ function addTodo(e) {
 function addTodoToUI(newTodo) {
     // creating a list item.
     const listItem = document.createElement("li");
-    listItem.className="list-group-item d-flex justify-content-between"
+    listItem.className = "list-group-item d-flex justify-content-between"
 
     // creating a link
     const link = document.createElement("a");
@@ -42,5 +50,21 @@ function addTodoToUI(newTodo) {
 
     // Adding list item to the Todo List
     todoList.appendChild(listItem)
+    todoInput.value = "";
+}
 
+function showAlert(alertType, message) {
+    /*  <div class="alert alert-warning" role="alert">
+                   
+                 </div>
+                  */
+    const alertElement = document.createElement("div")
+    alertElement.setAttribute("role", "alert")
+    alertElement.className = `alert alert-${alertType}`
+    alertElement.textContent = `${message}`
+    firstCardBody.appendChild(alertElement)
+
+    setTimeout(() => {
+        alertElement.remove()
+    }, 1000);
 }
