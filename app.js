@@ -11,6 +11,19 @@ eventListeners();
 function eventListeners() {
     form.addEventListener("submit", addTodo);
 
+    // Getting all todos from storage when page loaded.
+    document.addEventListener("DOMContentLoaded",loadAllTodosToUI);
+
+
+}
+
+function loadAllTodosToUI() {
+    let todos = getTodosFromStorage();
+
+    todos.forEach((todo) => {
+        addTodoToUI(todo)
+    });
+
 }
 
 
@@ -23,6 +36,9 @@ function addTodo(e) {
         showAlert("danger", "Lütfen bir todo girin..")
     } else {
         addTodoToUI(newTodo);
+        // Adding todos to the storage
+        addTodoToStorage(newTodo)
+
         showAlert("success", "Başarıyla eklendi.")
 
     }
@@ -51,13 +67,29 @@ function addTodoToUI(newTodo) {
     // Adding list item to the Todo List
     todoList.appendChild(listItem)
     todoInput.value = "";
+
+
 }
 
+// Getting todos from storage.
+function getTodosFromStorage() {
+    let todos;
+    if (localStorage.getItem("todos") === null) {
+        todos = [];
+    } else {
+        todos = JSON.parse(localStorage.getItem("todos"));
+    }
+
+    return todos;
+}
+function addTodoToStorage(newTodo) {
+    let todos = getTodosFromStorage();
+
+    todos.push(newTodo);
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
 function showAlert(alertType, message) {
-    /*  <div class="alert alert-warning" role="alert">
-                   
-                 </div>
-                  */
+
     const alertElement = document.createElement("div")
     alertElement.setAttribute("role", "alert")
     alertElement.className = `alert alert-${alertType}`
