@@ -77,11 +77,15 @@ function loadAllTodosToUI() {
 function addTodo(e) {
 
     const newTodo = todoInput.value.trim();
+    let todos = getTodosFromStorage();
 
     if (newTodo === "") {
 
         showAlert("danger", "Lütfen bir todo girin..")
-    } else {
+    }else if (todos.includes(newTodo)) {
+        showAlert("danger","Aynı todo'yu iki defa ekleyemezsiniz.")
+    } 
+    else {
         addTodoToUI(newTodo);
         // Adding todos to the storage
         addTodoToStorage(newTodo)
@@ -97,6 +101,7 @@ function addTodo(e) {
 
 // Adding string value to the UI as a list item.
 function addTodoToUI(newTodo) {
+
     // creating a list item.
     const listItem = document.createElement("li");
     listItem.className = "list-group-item d-flex justify-content-between"
